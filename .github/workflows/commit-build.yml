@@ -69,6 +69,7 @@ jobs:
           if-no-files-found: ignore
 
       - name: 上传编译结果到 pre-release (Upload build result to pre-release)
+        if: ${{matrix.os == 'windows-latest'}}
         uses: ncipollo/release-action@v1
         with:
           tag: v9.9.9
@@ -76,5 +77,14 @@ jobs:
           prerelease: true
           artifacts: |
             ./src-tauri/target/${{ matrix.target }}/release/bundle/**/*.exe
+
+      - name: 上传编译结果到 pre-release (Upload build result to pre-release)
+        if: ${{matrix.os == 'ubuntu-22.04'}}
+        uses: ncipollo/release-action@v1
+        with:
+          tag: v9.9.9
+          allowUpdates: true
+          prerelease: true
+          artifacts: |
             ./src-tauri/target/${{ matrix.target }}/release/bundle/**/*.deb
             ./src-tauri/target/${{ matrix.target }}/release/bundle/**/*.rpm
