@@ -114,5 +114,5 @@ jobs:
         uses: benc-uk/workflow-dispatch@v1.2.3
         with:
           workflow: release.yml
-          inputs: '{ "version": "${{steps.create-tag.outputs.current-version}}" }'
+          inputs: '{ "version": "${{ steps.check-version.outputs.current-version }}" }'
 
