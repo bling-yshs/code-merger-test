@@ -63,10 +63,7 @@ jobs:
         with:
           name: ${{ matrix.target }}-${{ github.sha }}
           path: |
-            ./src-tauri/target/${{ matrix.target }}/release/bundle/**/*.exe
-            ./src-tauri/target/${{ matrix.target }}/release/bundle/**/*.deb
-            ./src-tauri/target/${{ matrix.target }}/release/bundle/**/*.rpm
-          if-no-files-found: ignore
+            ./src-tauri/target/${{ matrix.target }}/release/bundle
 
       - name: 上传编译结果到 pre-release (Upload build result to pre-release)
         if: ${{matrix.os == 'windows-latest'}}
