@@ -9,8 +9,7 @@
     "frontendDist": "../dist"
   },
   "app": {
-    "windows": [
-    ],
+    "windows": [],
     "security": {
       "csp": null
     }
@@ -26,7 +25,9 @@
     "windows": {
       "nsis": {
         "installerIcon": "icons/icon.ico",
-        "languages": ["SimpChinese"],
+        "languages": [
+          "SimpChinese"
+        ],
         "installMode": "perMachine"
       }
     },
