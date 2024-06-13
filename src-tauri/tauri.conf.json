@@ -19,7 +19,7 @@
     "active": true,
     "category": "DeveloperTool",
     "targets": [
-      "msi"
+      "nsis"
     ],
     "windows": {
       "wix": {
