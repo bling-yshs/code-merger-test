@@ -66,10 +66,10 @@ jobs:
             ./src-tauri/target/${{ matrix.target }}/release/bundle/**/*.exe
             ./src-tauri/target/${{ matrix.target }}/release/bundle/**/*.deb
             ./src-tauri/target/${{ matrix.target }}/release/bundle/**/*.rpm
-            ./src-tauri/target/${{ matrix.target }}/release/bundle/**/*.AppImage
+          if-no-files-found: ignore
 
       - name: 上传编译结果到 pre-release (Upload build result to pre-release)
-        uses: ncipollo/release-action@v1.14.0
+        uses: ncipollo/release-action@v1
         with:
           tag: v9.9.9
           allowUpdates: true
@@ -78,4 +78,3 @@ jobs:
             ./src-tauri/target/${{ matrix.target }}/release/bundle/**/*.exe
             ./src-tauri/target/${{ matrix.target }}/release/bundle/**/*.deb
             ./src-tauri/target/${{ matrix.target }}/release/bundle/**/*.rpm
-            ./src-tauri/target/${{ matrix.target }}/release/bundle/**/*.AppImage
