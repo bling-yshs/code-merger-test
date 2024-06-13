@@ -68,9 +68,8 @@ jobs:
         if: ${{matrix.os == 'windows-latest'}}
         uses: ncipollo/release-action@v1
         with:
-          tag: v9.9.9
+          tag: ${{ inputs.version }}
           allowUpdates: true
-          prerelease: true
           artifacts: |
             ./src-tauri/target/${{ matrix.target }}/release/bundle/**/*.exe
 
@@ -78,9 +77,8 @@ jobs:
         if: ${{matrix.os == 'ubuntu-22.04'}}
         uses: ncipollo/release-action@v1
         with:
-          tag: v9.9.9
+          tag: ${{ inputs.version }}
           allowUpdates: true
-          prerelease: true
           artifacts: |
             ./src-tauri/target/${{ matrix.target }}/release/bundle/**/*.deb
             ./src-tauri/target/${{ matrix.target }}/release/bundle/**/*.rpm
