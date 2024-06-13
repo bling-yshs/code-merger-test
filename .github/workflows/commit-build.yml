@@ -63,3 +63,4 @@ jobs:
           allowUpdates: true
           prerelease: true
           artifacts: ./src-tauri/target/${{ matrix.target }}/release/bundle/nsis/*
+
