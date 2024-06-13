@@ -32,6 +32,6 @@ if __name__ == "__main__":
     latest = get_latest_release_tag(owner_name, repo_name)
     current = get_current_version()
     if compare_version(current, latest):
-        print(f'v{latest}')
+        print(f'v{current}')
     else:
         print(False)
