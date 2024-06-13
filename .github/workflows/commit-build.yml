@@ -27,6 +27,7 @@ jobs:
       - name: Rust 缓存 (Rust cache)
         uses: swatinem/rust-cache@v2
         with:
+          key: ${{ matrix.target }}
           workspaces: './src-tauri -> target'
 
       - name: 安装 pnpm (Install pnpm)
