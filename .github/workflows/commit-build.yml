@@ -15,6 +15,8 @@ jobs:
             target: x86_64-pc-windows-msvc
           - os: windows-latest
             target: aarch64-pc-windows-msvc
+          - os: ubuntu-22.04
+            target: x86_64-unknown-linux-gnu
     name: 🛠️ 自动构建
     runs-on: ${{ matrix.os }}
     steps:
@@ -47,6 +49,12 @@ jobs:
       - name: 安装 rust target (Install rust target)
         run: rustup target add ${{ matrix.target }}
 
+      - name: 开启 SSH 服务 (Start SSH service)
+        if: ${{ matrix.os == 'ubuntu-22.04' }}
+        uses: lhotari/action-upterm@v1
+        with:
+          wait-timeout-minutes: 20
+
       - name: 构建应用 (Build app)
         run: pnpm tauri build --target ${{ matrix.target }}
 
@@ -63,4 +71,3 @@ jobs:
           allowUpdates: true
           prerelease: true
           artifacts: ./src-tauri/target/${{ matrix.target }}/release/bundle/nsis/*
-
