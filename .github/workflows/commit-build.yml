@@ -63,10 +63,10 @@ jobs:
         with:
           name: ${{ matrix.target }}-${{ github.sha }}
           path: |
-            ./src-tauri/target/${{ matrix.target }}/release/bundle/*.exe
-            ./src-tauri/target/${{ matrix.target }}/release/bundle/*.deb
-            ./src-tauri/target/${{ matrix.target }}/release/bundle/*.rpm
-            ./src-tauri/target/${{ matrix.target }}/release/bundle/*.AppImage
+            ./src-tauri/target/${{ matrix.target }}/release/bundle/**/*.exe
+            ./src-tauri/target/${{ matrix.target }}/release/bundle/**/*.deb
+            ./src-tauri/target/${{ matrix.target }}/release/bundle/**/*.rpm
+            ./src-tauri/target/${{ matrix.target }}/release/bundle/**/*.AppImage
 
       - name: 上传编译结果到 pre-release (Upload build result to pre-release)
         uses: ncipollo/release-action@v1.14.0
@@ -74,4 +74,8 @@ jobs:
           tag: v9.9.9
           allowUpdates: true
           prerelease: true
-          artifacts: ./src-tauri/target/${{ matrix.target }}/release/bundle/nsis/*
+          artifacts: |
+            ./src-tauri/target/${{ matrix.target }}/release/bundle/**/*.exe
+            ./src-tauri/target/${{ matrix.target }}/release/bundle/**/*.deb
+            ./src-tauri/target/${{ matrix.target }}/release/bundle/**/*.rpm
+            ./src-tauri/target/${{ matrix.target }}/release/bundle/**/*.AppImage
