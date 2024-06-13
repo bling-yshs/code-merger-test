@@ -7,8 +7,16 @@ on:
 
 jobs:
   auto-build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            target: x86_64-pc-windows-msvc
+          - os: windows-latest
+            target: aarch64-pc-windows-msvc
     name: 🛠️ 自动构建
-    runs-on: windows-latest
+    runs-on: ${{ matrix.os }}
     steps:
       - name: 克隆当前仓库 (Clone current repo)
         uses: actions/checkout@v4
@@ -35,19 +43,16 @@ jobs:
       - name: 安装前端依赖 (Install frontend dependencies)
         run: pnpm install
 
-      - name: 开启 SSH 服务 (Start SSH service)
-        uses: lhotari/action-upterm@v1
-        with:
-          wait-timeout-minutes: 20
+      - name: 安装 rust target (Install rust target)
+        run: rustup target add ${{ matrix.target }}
 
       - name: 构建应用 (Build app)
-        run: pnpm tauri build
+        run: pnpm tauri build --target ${{ matrix.target }}
 
       - name: 上传编译结果到 Artifact (Upload build result to Artifact)
         uses: actions/upload-artifact@v4
         with:
-          name: build-msi-${{ github.sha }}
-          path: ./src-tauri/target/release/bundle/msi/*
+          path: ./src-tauri/target/${{ matrix.target }}/bundle/msi/*
 
       - name: 上传编译结果到 pre-release (Upload build result to pre-release)
         uses: ncipollo/release-action@v1.14.0
@@ -56,4 +61,4 @@ jobs:
           allowUpdates: true
           removeArtifacts: true
           prerelease: true
-          artifacts: ./src-tauri/target/release/bundle/msi/*
+          artifacts: ./src-tauri/target/${{ matrix.target }}/bundle/msi/*
