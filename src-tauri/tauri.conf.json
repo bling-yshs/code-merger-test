@@ -1,6 +1,6 @@
 {
   "productName": "code-merger-tauri",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "identifier": "com.code-merger-tauri.desktop",
   "build": {
     "beforeDevCommand": "pnpm dev",
@@ -22,8 +22,10 @@
       "nsis"
     ],
     "windows": {
-      "wix": {
-        "language": "zh-CN"
+      "nsis": {
+        "installerIcon": "icons/icon.ico",
+        "languages": ["SimpChinese"],
+        "installMode": "perMachine"
       }
     },
     "icon": [

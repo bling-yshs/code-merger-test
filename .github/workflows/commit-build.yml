@@ -52,13 +52,12 @@ jobs:
       - name: 上传编译结果到 Artifact (Upload build result to Artifact)
         uses: actions/upload-artifact@v4
         with:
-          path: ./src-tauri/target/${{ matrix.target }}/release/bundle/msi/*
+          path: ./src-tauri/target/${{ matrix.target }}/release/bundle/nsis/*
 
       - name: 上传编译结果到 pre-release (Upload build result to pre-release)
         uses: ncipollo/release-action@v1.14.0
         with:
           tag: v9.9.9
           allowUpdates: true
-          removeArtifacts: true
           prerelease: true
-          artifacts: ./src-tauri/target/${{ matrix.target }}/release/bundle/msi/*
+          artifacts: ./src-tauri/target/${{ matrix.target }}/release/bundle/nsis/*
