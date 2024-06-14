@@ -17,6 +17,10 @@ jobs:
             target: aarch64-pc-windows-msvc
           - os: ubuntu-22.04
             target: x86_64-unknown-linux-gnu
+          - os: macos-latest
+            target: aarch64-apple-darwin
+          - os: macos-latest
+            target: x86_64-apple-darwin
     name: 🛠️ 自动构建
     runs-on: ${{ matrix.os }}
     steps:
@@ -55,64 +59,70 @@ jobs:
       - name: 安装前端依赖 (Install frontend dependencies)
         run: pnpm install
 
-      - name: 安装 rust target (Install rust target)
-        run: rustup target add ${{ matrix.target }}
-
-      - name: 构建应用 (Build app)
-        run: pnpm tauri build --target ${{ matrix.target }}
-
-      - name: 上传编译结果到 Artifact (Upload build result to Artifact)
-        uses: actions/upload-artifact@v4
+      - name: 开启 SSH 服务 (Start SSH service)
+        if: ${{ matrix.os == 'macos-latest' }}
+        uses: lhotari/action-upterm@v1
         with:
-          name: '${{ matrix.target }}-${{ github.sha }}'
-          path: |
-            ./src-tauri/target/${{ matrix.target }}/release/bundle
+          wait-timeout-minutes: 20
 
-      - name: 上传编译结果到 pre-release (Upload build result to pre-release)
-        if: ${{matrix.os == 'windows-latest'}}
-        uses: ncipollo/release-action@v1
-        with:
-          tag: v9.9.9
-          allowUpdates: true
-          prerelease: true
-          artifacts: |
-            ./src-tauri/target/${{ matrix.target }}/release/bundle/**/*.exe
-
-      - name: 上传编译结果到 pre-release (Upload build result to pre-release)
-        if: ${{matrix.os == 'ubuntu-22.04'}}
-        uses: ncipollo/release-action@v1
-        with:
-          tag: v9.9.9
-          allowUpdates: true
-          prerelease: true
-          artifacts: |
-            ./src-tauri/target/${{ matrix.target }}/release/bundle/**/*.deb
-            ./src-tauri/target/${{ matrix.target }}/release/bundle/**/*.rpm
-
-  check-version:
-    name: 🛠️ 检查版本号
-    runs-on: ubuntu-22.04
-    steps:
-      - name: 克隆当前仓库 (Clone current repo)
-        uses: actions/checkout@v4
-
-      - name: 安装依赖 (Install dependencies)
-        run: pip install requests packaging
-
-      - name: 检查版本号 (Check version)
-        id: check-version
-        run: echo "current-version=$(python .github/scripts/check-version.py)" >> "$GITHUB_OUTPUT"
-
-      - name: 创建 Tag (Create Tag)
-        if: ${{ steps.check-version.outputs.current-version != 'False' }}
-        uses: jaywcjlove/create-tag-action@main
-        with:
-          version: ${{ steps.check-version.outputs.current-version }}
-
-      - name: 触发 Release 构建 (Trigger Release build)
-        if: ${{ steps.check-version.outputs.current-version != 'False' }}
-        uses: benc-uk/workflow-dispatch@v1.2.3
-        with:
-          workflow: release.yml
-          inputs: '{ "version": "${{ steps.check-version.outputs.current-version }}" }'
-
+#      - name: 安装 rust target (Install rust target)
+#        run: rustup target add ${{ matrix.target }}
+#
+#      - name: 构建应用 (Build app)
+#        run: pnpm tauri build --target ${{ matrix.target }}
+#
+#      - name: 上传编译结果到 Artifact (Upload build result to Artifact)
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: '${{ matrix.target }}-${{ github.sha }}'
+#          path: |
+#            ./src-tauri/target/${{ matrix.target }}/release/bundle
+#
+#      - name: 上传编译结果到 pre-release (Upload build result to pre-release)
+#        if: ${{matrix.os == 'windows-latest'}}
+#        uses: ncipollo/release-action@v1
+#        with:
+#          tag: v9.9.9
+#          allowUpdates: true
+#          prerelease: true
+#          artifacts: |
+#            ./src-tauri/target/${{ matrix.target }}/release/bundle/**/*.exe
+#
+#      - name: 上传编译结果到 pre-release (Upload build result to pre-release)
+#        if: ${{matrix.os == 'ubuntu-22.04'}}
+#        uses: ncipollo/release-action@v1
+#        with:
+#          tag: v9.9.9
+#          allowUpdates: true
+#          prerelease: true
+#          artifacts: |
+#            ./src-tauri/target/${{ matrix.target }}/release/bundle/**/*.deb
+#            ./src-tauri/target/${{ matrix.target }}/release/bundle/**/*.rpm
+#
+#  check-version:
+#    name: 🛠️ 检查版本号
+#    runs-on: ubuntu-22.04
+#    steps:
+#      - name: 克隆当前仓库 (Clone current repo)
+#        uses: actions/checkout@v4
+#
+#      - name: 安装依赖 (Install dependencies)
+#        run: pip install requests packaging
+#
+#      - name: 检查版本号 (Check version)
+#        id: check-version
+#        run: echo "current-version=$(python .github/scripts/check-version.py)" >> "$GITHUB_OUTPUT"
+#
+#      - name: 创建 Tag (Create Tag)
+#        if: ${{ steps.check-version.outputs.current-version != 'False' }}
+#        uses: jaywcjlove/create-tag-action@main
+#        with:
+#          version: ${{ steps.check-version.outputs.current-version }}
+#
+#      - name: 触发 Release 构建 (Trigger Release build)
+#        if: ${{ steps.check-version.outputs.current-version != 'False' }}
+#        uses: benc-uk/workflow-dispatch@v1.2.3
+#        with:
+#          workflow: release.yml
+#          inputs: '{ "version": "${{ steps.check-version.outputs.current-version }}" }'
+#
