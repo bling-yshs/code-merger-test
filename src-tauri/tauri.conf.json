@@ -9,13 +9,11 @@
     "frontendDist": "../dist"
   },
   "app": {
+    "macOSPrivateApi": false,
     "windows": [],
     "security": {
       "csp": null
     }
-  },
-  "tauri": {
-    "macOSPrivateApi": true
   },
   "bundle": {
     "active": true,
