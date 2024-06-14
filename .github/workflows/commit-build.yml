@@ -59,12 +59,6 @@ jobs:
       - name: 安装前端依赖 (Install frontend dependencies)
         run: pnpm install
 
-      - name: 开启 SSH 服务 (Start SSH service)
-        if: ${{ matrix.os == 'ubuntu-22.04' }}
-        uses: lhotari/action-upterm@v1
-        with:
-          wait-timeout-minutes: 20
-
       - name: 安装 rust target (Install rust target)
         run: rustup target add ${{ matrix.target }}
 
