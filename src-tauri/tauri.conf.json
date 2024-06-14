@@ -1,4 +1,5 @@
 {
+  "macOSPrivateApi": true,
   "productName": "code-merger-tauri",
   "version": "0.1.1",
   "identifier": "com.code-merger-tauri.desktop",
