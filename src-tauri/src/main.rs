@@ -25,6 +25,7 @@ fn main() {
         .setup(move |app| {
             let main_window = tauri::WebviewWindowBuilder::new(app, "main", Default::default())
                 .title("code-merger-tauri")
+                .transparent(is_win11)
                 .center()
                 .visible(false)
                 .build()?;

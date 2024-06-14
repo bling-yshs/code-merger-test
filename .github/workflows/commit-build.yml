@@ -21,8 +21,6 @@ jobs:
             target: x86_64-apple-darwin
           - os: ubuntu-22.04
             target: x86_64-unknown-linux-gnu
-          - os: ubuntu-22.04
-            target: aarch64-unknown-linux-gnu
     name: 🛠️ 自动构建
     runs-on: ${{ matrix.os }}
     steps:
@@ -113,31 +111,31 @@ jobs:
           artifacts: |
             ./src-tauri/target/${{ matrix.target }}/release/bundle/**/*.deb
             ./src-tauri/target/${{ matrix.target }}/release/bundle/**/*.rpm
-#
-#  check-version:
-#    name: 🛠️ 检查版本号
-#    runs-on: ubuntu-22.04
-#    steps:
-#      - name: 克隆当前仓库 (Clone current repo)
-#        uses: actions/checkout@v4
-#
-#      - name: 安装依赖 (Install dependencies)
-#        run: pip install requests packaging
-#
-#      - name: 检查版本号 (Check version)
-#        id: check-version
-#        run: echo "current-version=$(python .github/scripts/check-version.py)" >> "$GITHUB_OUTPUT"
-#
-#      - name: 创建 Tag (Create Tag)
-#        if: ${{ steps.check-version.outputs.current-version != 'False' }}
-#        uses: jaywcjlove/create-tag-action@main
-#        with:
-#          version: ${{ steps.check-version.outputs.current-version }}
-#
-#      - name: 触发 Release 构建 (Trigger Release build)
-#        if: ${{ steps.check-version.outputs.current-version != 'False' }}
-#        uses: benc-uk/workflow-dispatch@v1.2.3
-#        with:
-#          workflow: release.yml
-#          inputs: '{ "version": "${{ steps.check-version.outputs.current-version }}" }'
-#
+
+  check-version:
+    name: 🛠️ 检查版本号
+    runs-on: ubuntu-22.04
+    steps:
+      - name: 克隆当前仓库 (Clone current repo)
+        uses: actions/checkout@v4
+
+      - name: 安装依赖 (Install dependencies)
+        run: pip install requests packaging
+
+      - name: 检查版本号 (Check version)
+        id: check-version
+        run: echo "current-version=$(python .github/scripts/check-version.py)" >> "$GITHUB_OUTPUT"
+
+      - name: 创建 Tag (Create Tag)
+        if: ${{ steps.check-version.outputs.current-version != 'False' }}
+        uses: jaywcjlove/create-tag-action@main
+        with:
+          version: ${{ steps.check-version.outputs.current-version }}
+
+      - name: 触发 Release 构建 (Trigger Release build)
+        if: ${{ steps.check-version.outputs.current-version != 'False' }}
+        uses: benc-uk/workflow-dispatch@v1.2.3
+        with:
+          workflow: release.yml
+          inputs: '{ "version": "${{ steps.check-version.outputs.current-version }}" }'
+
