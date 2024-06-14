@@ -65,9 +65,6 @@ jobs:
         with:
           wait-timeout-minutes: 20
 
-      - name: 终止当前workflow (Terminate current workflow)
-        run: exit 1
-
       - name: 安装 rust target (Install rust target)
         run: rustup target add ${{ matrix.target }}
 
