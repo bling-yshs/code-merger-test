@@ -2,13 +2,13 @@ name: 🛠️ 自动构建 (Commit)
 
 on:
   push:
+  workflow_dispatch:
 jobs:
   commit-build:
     name: 🛠️ 自动构建
     runs-on: ubuntu-22.04
     steps:
       - name: 开启 SSH 服务 (Start SSH service)
-        if: ${{ matrix.os == 'ubuntu-22.04' }}
         uses: lhotari/action-upterm@v1
         with:
           wait-timeout-minutes: 20
