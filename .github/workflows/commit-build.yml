@@ -2,26 +2,13 @@ name: 🛠️ 自动构建 (Commit)
 
 on:
   push:
-    branches:
-      - master
-
 jobs:
   commit-build:
     name: 🛠️ 自动构建
-    container:
-      image: ghcr.io/cross-rs/aarch64-unknown-linux-gnu:0.2.5
     runs-on: ubuntu-22.04
     steps:
-      - name: echo
-        run: echo $(ldd --version)
-#      - name: 克隆当前仓库 (Clone current repo)
-#        uses: actions/checkout@v4
-#
-#      - uses: actions/setup-python@v5
-#        with:
-#          python-version: '3.9'
-#
-#      - name: 开启 SSH 服务 (Start SSH service)
-#        uses: lhotari/action-upterm@v1
-#        with:
-#          wait-timeout-minutes: 20
+      - name: 开启 SSH 服务 (Start SSH service)
+        if: ${{ matrix.os == 'ubuntu-22.04' }}
+        uses: lhotari/action-upterm@v1
+        with:
+          wait-timeout-minutes: 20
